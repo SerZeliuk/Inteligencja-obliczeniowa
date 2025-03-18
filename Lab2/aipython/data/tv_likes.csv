@@ -1,0 +1,13 @@
+Example, Comedy, Doctors, Lawyers, Guns, Likes 
+e_1, false, true, false, false, false
+e_2, true, false, true, false, true
+e_3, false, false, true, true, true
+e_4, false, false, true, false, false 
+e_5, false, false, false, true, false 
+e_6, true, false, false, true, false
+e_7, true, false, false, false, true
+e_8, false, true, true, true, true
+e_9, false, true, true, false, false
+e_10, true, true, true, false, true
+e_11, true, true, false, true, false
+e_12, false, false, false, false, false
