@@ -1,6 +1,6 @@
 from aircargo import Strips, STRIPS_domain, Planning_problem
 
-def create_air_cargo_domain(cargos, planes, airports):
+def create_air_cargo_domain(cargos, planes, airports, direct_flights):
     """
     Tworzy domenę STRIPS dla prostego problemu 'air cargo',
     w którym mamy zbiór ładunków (cargos), samolotów (planes)
@@ -82,6 +82,8 @@ def create_air_cargo_domain(cargos, planes, airports):
     #   Efekty:
     #     - samolot p znajduje się teraz na lotnisku "to" (At_{p} = to)
     #   Oczywiście "from" != "to", więc nie chcemy generować akcji FLY p z lotniska do tego samego lotniska.
+    
+    
     for p in planes:
         for fr in airports:
             for to in airports:
@@ -99,14 +101,47 @@ def create_air_cargo_domain(cargos, planes, airports):
     return STRIPS_domain(feature_domain_dict, actions)
 
 
+def goal_satisfied(state, goal):
+    return all(state.get(k) == v for k, v in goal.items())
+
+def apply_action(state, action):
+    # Check if the action's preconditions hold
+    if not all(state.get(k) == v for k, v in action.preconds.items()):
+        return None
+    new_state = state.copy()
+    # Apply the action's effects
+    for k, v in action.effects.items():
+        new_state[k] = v
+    return new_state
+
+def plan(problem: Planning_problem):
+    from collections import deque
+    start = problem.initial_state
+    frontier = deque([(start, [])])
+    visited = set()
+    while frontier:
+        state, path = frontier.popleft()
+        state_key = tuple(sorted(state.items()))
+        if state_key in visited:
+            continue
+        visited.add(state_key)
+        if goal_satisfied(state, problem.goal):
+            return path
+        for action in problem.prob_domain.actions:
+            new_state = apply_action(state, action)
+            if new_state is not None:
+                frontier.append((new_state, path + [action]))
+    return None
+
+
 # Poniżej przykładowy problem planistyczny "na próbę",
 # w którym mamy 1 ładunek (C1), 1 samolot (P1) i 2 lotniska (SFO, JFK).
 # Cel: przetransportować ładunek C1 z lotniska SFO na lotnisko JFK.
 
 if __name__ == "__main__":
     # 1) Definiujemy listy ładunków, samolotów i lotnisk
-    cargos = ["C1"]
-    planes = ["P1"]
+    cargos = ["C1", "C2"]
+    planes = ["P1", "P2"]
     airports = ["SFO", "JFK"]
 
     # 2) Tworzymy domenę
@@ -117,12 +152,14 @@ if __name__ == "__main__":
     #    - samolot P1 jest na lotnisku SFO
     initial_state = {
         "At_C1": "SFO",
-        "At_P1": "SFO"
+        "At_P1": "SFO",
+        "At_P2": "SFO",
+        "At_C2": "JFK"
     }
 
     # 4) Określamy cel: ładunek C1 ma być na lotnisku JFK
     goal = {
-        "At_C1": "JFK"
+        "At_C1": "JFK", "At_C2": "SFO", "At_P1": "SFO", "At_P2": "SFO"
     }
 
     # 5) Tworzymy konkretny problem planistyczny
@@ -134,3 +171,12 @@ if __name__ == "__main__":
     print("Features:", air_cargo_domain.feature_domain_dict)
     print("Actions:", air_cargo_domain.actions)
     print("\nProblem:\n", air_cargo_problem)
+
+    # Get plan
+    solution = plan(air_cargo_problem)
+    if solution:
+        print("\nPlan found:")
+        for step in solution:
+            print(step.name)
+    else:
+        print("\nNo plan found.")
