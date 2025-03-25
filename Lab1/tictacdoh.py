@@ -3,6 +3,8 @@ import time
 import pandas as pd
 from easyAI import TwoPlayerGame, AI_Player, Negamax
 
+from ExpectiMinimax import ExpectiMinimax
+from Negamax_noAB import NegamaxNoAB
 ######################################
 # 1) The TicTacToe game class
 ######################################
@@ -144,6 +146,8 @@ def run_matches(n_matches, ai1, ai2, probabilistic=False, verbose=False):
             ai.total_time = 0.0
             ai.n_moves = 0
 
+    total_moves = 0  # New counter for moves
+
     for i in range(n_matches):
         # Switch who starts
         if i % 2 == 0:
@@ -162,7 +166,8 @@ def run_matches(n_matches, ai1, ai2, probabilistic=False, verbose=False):
             p1_starts = False
 
         game = TicTacToe(players, probabilistic=probabilistic)
-        game.play(verbose=verbose)
+        move_history = game.play(verbose=verbose)  # get moves played in current match
+        total_moves += len(move_history)
 
         # If .lose() is True, current_player lost => game.opponent_index is the winner
         if game.lose():
@@ -213,6 +218,8 @@ def run_matches(n_matches, ai1, ai2, probabilistic=False, verbose=False):
         "p1_non_starting_wins": p1_non_starter_wins,
         "p2_starting_wins": p2_starter_wins,
         "p2_non_starting_wins": p2_non_starter_wins,
+        "total_moves": total_moves,  # add total moves
+        "total_thinking_time": (ai1.total_time + ai2.total_time),  # combined thinking time
     }
 
     # If TimedAI, also record average times
@@ -244,7 +251,10 @@ def main():
         if use_ab:
             return TimedAI_Player(Negamax(depth=depth, scoring=None, win_score=float('inf'), tt=None))
         else:
-            return TimedAI_Player(Negamax(depth=depth, scoring=None, win_score=1e9, tt=None))
+            return TimedAI_Player(NegamaxNoAB(depth=depth))
+
+    def build_expectiminimax(depth):
+        return TimedAI_Player(ExpectiMinimax(depth=depth, scoring=None))
 
     results_list = []
 
@@ -263,33 +273,51 @@ def main():
             "P2_NonStarting_Wins": res_dict["p2_non_starting_wins"],
             "P1_AvgTime": res_dict["p1_avg_time"],
             "P2_AvgTime": res_dict["p2_avg_time"],
+            "Total_Moves": res_dict["total_moves"],               # new field
+            "Total_Thinking_Time": res_dict["total_thinking_time"], # new field
         }
         results_list.append(row)
 
-    n_matches = 100
+    n_matches = 10
 
+    # Test Negamax (with and without alpha-beta)
     for (d1, d2) in depth_pairs:
         for ab_setting in [True, False]:
-            # Create two AIs
+            # Create two Negamax AIs
             ai1 = build_timed_negamax(d1, use_ab=ab_setting)
             ai2 = build_timed_negamax(d2, use_ab=ab_setting)
             label = "AB" if ab_setting else "NoAB"
 
-            # 1) Deterministic
+            # 1) Deterministic Negamax
             res_det = run_matches(n_matches, ai1, ai2, probabilistic=False, verbose=False)
             record_results(label, d1, d2, False, res_det)
 
-            # 2) Probabilistic
-            # Rebuild so the times reset
+            # 2) Probabilistic Negamax
             ai1 = build_timed_negamax(d1, use_ab=ab_setting)
             ai2 = build_timed_negamax(d2, use_ab=ab_setting)
             res_prob = run_matches(n_matches, ai1, ai2, probabilistic=True, verbose=False)
             record_results(label, d1, d2, True, res_prob)
 
+    # Test ExpectiMinimax
+    for (d1, d2) in depth_pairs:
+        # Create two ExpectiMinimax AIs
+        ai1 = build_expectiminimax(d1)
+        ai2 = build_expectiminimax(d2)
+        
+        # 1) Deterministic ExpectiMinimax
+        res_det = run_matches(n_matches, ai1, ai2, probabilistic=False, verbose=False)
+        record_results("Expecti", d1, d2, False, res_det)
+
+        # 2) Probabilistic ExpectiMinimax
+        ai1 = build_expectiminimax(d1)
+        ai2 = build_expectiminimax(d2)
+        res_prob = run_matches(n_matches, ai1, ai2, probabilistic=True, verbose=False)
+        record_results("Expecti", d1, d2, True, res_prob)
+
     df = pd.DataFrame(results_list)
     print(df)
 
-    df.to_excel("results.xlsx", index=False)
+    df.to_excel("results_negamax_sum.xlsx", index=False)
     print("Results saved to results.xlsx")
 
 
