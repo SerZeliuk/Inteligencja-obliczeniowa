@@ -1,6 +1,6 @@
 from aircargo import Strips, STRIPS_domain, Planning_problem
 
-def create_air_cargo_domain(cargos, planes, airports, direct_flights):
+def create_air_cargo_domain(cargos, planes, airports):
     """
     Tworzy domenę STRIPS dla prostego problemu 'air cargo',
     w którym mamy zbiór ładunków (cargos), samolotów (planes)
