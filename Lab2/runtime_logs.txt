@@ -1,0 +1,73 @@
+=== PROBLEM 1: Normal Problem #1 (2 planes, 2 cargo, 3 airports) ===
+Number of actions in domain: 36
+Plan found (without heuristics) in 0.00000000s; length = 7
+Plan: FLY_P1_from_SFO_to_ORD -> LOAD_C2_onto_P1_at_ORD -> FLY_P1_from_ORD_to_SFO -> UNLOAD_C2_from_P1_at_SFO -> LOAD_C1_onto_P1_at_SFO -> FLY_P1_from_SFO_to_JFK -> UNLOAD_C1_from_P1_at_JFK
+Plan found (with heuristics) in 0.01332521s; length = 7
+Plan: FLY_P1_from_SFO_to_ORD -> LOAD_C2_onto_P1_at_ORD -> FLY_P1_from_ORD_to_SFO -> UNLOAD_C2_from_P1_at_SFO -> LOAD_C1_onto_P1_at_SFO -> FLY_P1_from_SFO_to_JFK -> UNLOAD_C1_from_P1_at_JFK
+
+=== PROBLEM 2: Normal Problem #2 (2 planes, 2 cargo, 2 airports) ===
+Number of actions in domain: 20
+Plan found (without heuristics) in 0.00261188s; length = 6
+Plan: LOAD_C2_onto_P1_at_SFO -> FLY_P1_from_SFO_to_JFK -> UNLOAD_C2_from_P1_at_JFK -> LOAD_C1_onto_P1_at_JFK -> FLY_P1_from_JFK_to_SFO -> UNLOAD_C1_from_P1_at_SFO
+Plan found (with heuristics) in 0.00000000s; length = 6
+Plan: LOAD_C2_onto_P1_at_SFO -> FLY_P1_from_SFO_to_JFK -> UNLOAD_C2_from_P1_at_JFK -> LOAD_C1_onto_P1_at_JFK -> FLY_P1_from_JFK_to_SFO -> UNLOAD_C1_from_P1_at_SFO
+
+=== PROBLEM 3: Normal Problem #3 (2 planes, 3 cargo, 2 airports) ===
+Number of actions in domain: 28
+Plan found (without heuristics) in 0.00175166s; length = 9
+Plan: LOAD_C2_onto_P2_at_JFK -> LOAD_C3_onto_P1_at_SFO -> FLY_P1_from_SFO_to_JFK -> UNLOAD_C3_from_P1_at_JFK -> FLY_P2_from_JFK_to_SFO -> UNLOAD_C2_from_P2_at_SFO -> LOAD_C1_onto_P2_at_SFO -> FLY_P2_from_SFO_to_JFK -> UNLOAD_C1_from_P2_at_JFK
+Plan found (with heuristics) in 0.00241542s; length = 9
+Plan: LOAD_C2_onto_P2_at_JFK -> LOAD_C3_onto_P1_at_SFO -> FLY_P1_from_SFO_to_JFK -> UNLOAD_C3_from_P1_at_JFK -> FLY_P2_from_JFK_to_SFO -> UNLOAD_C2_from_P2_at_SFO -> LOAD_C1_onto_P2_at_SFO -> FLY_P2_from_SFO_to_JFK -> UNLOAD_C1_from_P2_at_JFK
+
+=== PROBLEM 4: Subgoals Problem #1 (2 planes, 2 cargo, 3 airports) ===
+Number of actions in domain: 36
+Plan found (without heuristics) in 0.00259566s; length = 7
+Plan: FLY_P1_from_ORD_to_SFO -> LOAD_C1_onto_P2_at_SFO -> FLY_P2_from_SFO_to_JFK -> UNLOAD_C1_from_P2_at_JFK -> LOAD_C2_onto_P2_at_JFK -> FLY_P2_from_JFK_to_ORD -> UNLOAD_C2_from_P2_at_ORD
+Plan found (with heuristics) in 0.00268722s; length = 7
+Plan: FLY_P1_from_ORD_to_SFO -> LOAD_C1_onto_P2_at_SFO -> FLY_P2_from_SFO_to_JFK -> UNLOAD_C1_from_P2_at_JFK -> LOAD_C2_onto_P2_at_JFK -> FLY_P2_from_JFK_to_ORD -> UNLOAD_C2_from_P2_at_ORD
+
+=== PROBLEM 5: Subgoals Problem #2 (2 planes, 2 cargo, 3 airports) ===
+Number of actions in domain: 36
+Plan found (without heuristics) in 0.00351882s; length = 9
+Plan: FLY_P1_from_SFO_to_ORD -> LOAD_C2_onto_P1_at_ORD -> FLY_P1_from_ORD_to_JFK -> UNLOAD_C2_from_P1_at_JFK -> FLY_P1_from_JFK_to_ORD -> LOAD_C1_onto_P1_at_ORD -> FLY_P1_from_ORD_to_SFO -> UNLOAD_C1_from_P1_at_SFO -> FLY_P2_from_JFK_to_ORD
+Plan found (with heuristics) in 0.00258493s; length = 9
+Plan: FLY_P1_from_SFO_to_ORD -> LOAD_C2_onto_P1_at_ORD -> FLY_P1_from_ORD_to_JFK -> UNLOAD_C2_from_P1_at_JFK -> FLY_P1_from_JFK_to_ORD -> LOAD_C1_onto_P1_at_ORD -> FLY_P1_from_ORD_to_SFO -> UNLOAD_C1_from_P1_at_SFO -> FLY_P2_from_JFK_to_ORD
+
+=== PROBLEM 6: Subgoals Problem #3 (2 planes, 2 cargo, 3 airports) ===
+Number of actions in domain: 36
+Plan found (without heuristics) in 0.00193691s; length = 8
+Plan: FLY_P1_from_JFK_to_SFO -> LOAD_C1_onto_P1_at_SFO -> FLY_P1_from_SFO_to_ORD -> FLY_P2_from_JFK_to_ORD -> LOAD_C2_onto_P2_at_ORD -> UNLOAD_C1_from_P1_at_ORD -> FLY_P2_from_ORD_to_SFO -> UNLOAD_C2_from_P2_at_SFO
+Plan found (with heuristics) in 0.00273800s; length = 8
+Plan: FLY_P1_from_JFK_to_SFO -> LOAD_C1_onto_P1_at_SFO -> FLY_P1_from_SFO_to_ORD -> FLY_P2_from_JFK_to_ORD -> LOAD_C2_onto_P2_at_ORD -> UNLOAD_C1_from_P1_at_ORD -> FLY_P2_from_ORD_to_SFO -> UNLOAD_C2_from_P2_at_SFO
+
+=== PROBLEM 7: Bigger Problem #7 (2 planes, 7 cargo, 4 airports) ===
+Number of actions in domain: 204
+No plan found or timed out (without heuristics).
+Plan found (with heuristics) in 237.48214030s; length = 19
+Plan: LOAD_C1_onto_P1_at_SFO -> FLY_P1_from_SFO_to_JFK -> LOAD_C3_onto_P3_at_ORD -> LOAD_C2_onto_P2_at_JFK -> FLY_P2_from_JFK_to_ORD -> UNLOAD_C2_from_P2_at_ORD -> UNLOAD_C1_from_P1_at_JFK -> LOAD_C4_onto_P1_at_JFK -> FLY_P1_from_JFK_to_SFO -> UNLOAD_C4_from_P1_at_SFO -> LOAD_C7_onto_P1_at_SFO -> FLY_P1_from_SFO_to_ATL -> UNLOAD_C7_from_P1_at_ATL -> FLY_P3_from_ORD_to_ATL -> UNLOAD_C3_from_P3_at_ATL -> FLY_P3_from_ATL_to_ORD -> LOAD_C5_onto_P3_at_ORD -> FLY_P3_from_ORD_to_JFK -> UNLOAD_C5_from_P3_at_JFK
+
+=== PROBLEM 8: Bigger Problem #8 (2 planes, 5 cargo, 5 airports) ===
+Number of actions in domain: 160
+Plan found (without heuristics) in 110.81333447s; length = 20
+Plan: LOAD_C1_onto_P1_at_SFO -> LOAD_C4_onto_P2_at_ORD -> FLY_P2_from_ORD_to_SFO -> FLY_P1_from_SFO_to_JFK -> UNLOAD_C4_from_P2_at_SFO -> LOAD_C2_onto_P2_at_SFO -> FLY_P2_from_SFO_to_ATL -> UNLOAD_C2_from_P2_at_ATL -> LOAD_C6_onto_P2_at_ATL -> FLY_P2_from_ATL_to_LAX -> UNLOAD_C6_from_P2_at_LAX -> FLY_P2_from_LAX_to_JFK -> UNLOAD_C1_from_P1_at_JFK -> LOAD_C3_onto_P1_at_JFK -> FLY_P1_from_JFK_to_LAX -> UNLOAD_C3_from_P1_at_LAX -> LOAD_C5_onto_P1_at_LAX -> FLY_P1_from_LAX_to_ORD -> UNLOAD_C5_from_P1_at_ORD -> FLY_P1_from_ORD_to_ATL
+Plan found (with heuristics) in 85.28159785s; length = 20
+Plan: LOAD_C1_onto_P1_at_SFO -> LOAD_C4_onto_P2_at_ORD -> FLY_P2_from_ORD_to_SFO -> FLY_P1_from_SFO_to_JFK -> UNLOAD_C4_from_P2_at_SFO -> LOAD_C2_onto_P2_at_SFO -> FLY_P2_from_SFO_to_ATL -> UNLOAD_C2_from_P2_at_ATL -> LOAD_C6_onto_P2_at_ATL -> FLY_P2_from_ATL_to_LAX -> UNLOAD_C6_from_P2_at_LAX -> FLY_P2_from_LAX_to_JFK -> UNLOAD_C1_from_P1_at_JFK -> LOAD_C3_onto_P1_at_JFK -> FLY_P1_from_JFK_to_LAX -> UNLOAD_C3_from_P1_at_LAX -> LOAD_C5_onto_P1_at_LAX -> FLY_P1_from_LAX_to_ORD -> UNLOAD_C5_from_P1_at_ORD -> FLY_P1_from_ORD_to_ATL
+
+=== PROBLEM 9: Bigger Problem #9 (2 planes, 7 cargo, 4 airports; variant) ===
+Number of actions in domain: 136
+Plan found (without heuristics) in 117.81604290s; length = 24
+Plan: LOAD_C2_onto_P2_at_ORD -> FLY_P2_from_ORD_to_ATL -> LOAD_C1_onto_P1_at_JFK -> UNLOAD_C2_from_P2_at_ATL -> LOAD_C4_onto_P2_at_ATL -> FLY_P2_from_ATL_to_ORD -> UNLOAD_C4_from_P2_at_ORD -> LOAD_C3_onto_P2_at_ORD -> FLY_P2_from_ORD_to_JFK -> UNLOAD_C3_from_P2_at_JFK -> FLY_P2_from_JFK_to_SFO -> LOAD_C7_onto_P2_at_SFO -> FLY_P2_from_SFO_to_ORD -> UNLOAD_C7_from_P2_at_ORD -> FLY_P2_from_ORD_to_SFO -> LOAD_C6_onto_P2_at_SFO -> FLY_P2_from_SFO_to_JFK -> UNLOAD_C6_from_P2_at_JFK -> FLY_P2_from_JFK_to_SFO -> FLY_P1_from_JFK_to_SFO -> UNLOAD_C1_from_P1_at_SFO -> LOAD_C5_onto_P1_at_SFO -> FLY_P1_from_SFO_to_ATL -> UNLOAD_C5_from_P1_at_ATL
+Plan found (with heuristics) in 78.79018116s; length = 24
+Plan: LOAD_C2_onto_P2_at_ORD -> FLY_P2_from_ORD_to_ATL -> LOAD_C1_onto_P1_at_JFK -> UNLOAD_C2_from_P2_at_ATL -> LOAD_C4_onto_P2_at_ATL -> FLY_P2_from_ATL_to_ORD -> UNLOAD_C4_from_P2_at_ORD -> LOAD_C3_onto_P2_at_ORD -> FLY_P2_from_ORD_to_JFK -> UNLOAD_C3_from_P2_at_JFK -> FLY_P2_from_JFK_to_SFO -> FLY_P1_from_JFK_to_SFO -> UNLOAD_C1_from_P1_at_SFO -> LOAD_C7_onto_P1_at_SFO -> FLY_P1_from_SFO_to_ORD -> UNLOAD_C7_from_P1_at_ORD -> FLY_P1_from_ORD_to_SFO -> LOAD_C6_onto_P1_at_SFO -> FLY_P1_from_SFO_to_JFK -> UNLOAD_C6_from_P1_at_JFK -> FLY_P1_from_JFK_to_SFO -> LOAD_C5_onto_P1_at_SFO -> FLY_P1_from_SFO_to_ATL -> UNLOAD_C5_from_P1_at_ATL
+
+Saved results to air_cargo_results.csv
+                                        problem_name  ... time_heuristic
+0  Normal Problem #1 (2 planes, 2 cargo, 3 airports)  ...     0.01332521
+1  Normal Problem #2 (2 planes, 2 cargo, 2 airports)  ...     0.00000000
+2  Normal Problem #3 (2 planes, 3 cargo, 2 airports)  ...     0.00241542
+3  Subgoals Problem #1 (2 planes, 2 cargo, 3 airp...  ...     0.00268722
+4  Subgoals Problem #2 (2 planes, 2 cargo, 3 airp...  ...     0.00258493
+5  Subgoals Problem #3 (2 planes, 2 cargo, 3 airp...  ...     0.00273800
+6  Bigger Problem #7 (3 planes, 7 cargo, 4 airports)  ...   237.48214030
+7  Bigger Problem #8 (2 planes, 6 cargo, 5 airports)  ...    85.28159785
+8  Bigger Problem #9 (2 planes, 7 cargo, 4 airpor...  ...    78.79018116

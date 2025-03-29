@@ -5,49 +5,21 @@ from aircargo import Strips, STRIPS_domain, Planning_problem
 import time
 
 def create_air_cargo_domain(cargos, planes, airports):
-    """
-    Tworzy domenę STRIPS dla prostego problemu 'air cargo',
-    w którym mamy zbiór ładunków (cargos), samolotów (planes)
-    i lotnisk (airports).
-    """
-    # 1) Definiujemy słownik (feature_domain_dict) który mapuje nazwę cechy (feature)
-    #    na zbiór możliwych wartości dla tej cechy.
-    #    W tym podejściu cecha "At_X" oznacza "Gdzie jest X?", a wartości to nazwy lotnisk
-    #    lub samolotów (jeśli X to ładunek).
     
     feature_domain_dict = {}
     
-    # Dla każdego ładunku definiujemy cechę "At_C" (gdzie jest cargo?),
-    # której możliwe wartości to wszystkie lotniska oraz wszystkie samoloty.
     for c in cargos:
         feature_domain_dict[f"At_{c}"] = set(airports) | set(planes)
     
-    # Dla każdego samolotu definiujemy cechę "At_P", której możliwe wartości to lotniska.
-    # Zakładamy, że samolot nie "wchodzi" do innego samolotu, więc wartości to tylko lotniska.
     for p in planes:
         feature_domain_dict[f"At_{p}"] = set(airports)
-    # Add plane emptiness feature for each plane
+   
     for p in planes:
         feature_domain_dict[f"Empty_{p}"] = {True, False}
     
-    # 2) Definiujemy zbiór akcji (actions) w ujęciu STRIPS:
-    #    - LOAD (załaduj ładunek na samolot)
-    #    - UNLOAD (rozładuj ładunek z samolotu)
-    #    - FLY (poleć samolotem z jednego lotniska na drugie)
-
+   
     actions = set()
 
-    # 2A) LOAD: 
-    #   Parametry: cargo c, plane p, airport a
-    #   Prekondycje:
-    #     - ładunek c jest w miejscu a (At_{c} = a)
-    #     - samolot p jest w tym samym miejscu a (At_{p} = a)
-    #     - samolot p jest pusty (Empty_{p} = True)
-    #   Efekty:
-    #     - ładunek c jest teraz w samolocie p (At_{c} = p)
-    #     - samolot p nie jest już pusty (Empty_{p} = False)
-    #
-    #   Tworzymy osobny obiekt Strips dla każdej kombinacji c, p, a.
     for c in cargos:
         for p in planes:
             for a in airports:
@@ -63,15 +35,7 @@ def create_air_cargo_domain(cargos, planes, airports):
                 }
                 actions.add(Strips(name, preconds, effects))
 
-    # 2B) UNLOAD:
-    #   Parametry: cargo c, plane p, airport a
-    #   Prekondycje:
-    #     - ładunek c jest aktualnie w samolocie p (At_{c} = p)
-    #     - samolot p jest na lotnisku a (At_{p} = a)
-    #   Efekty:
-    #     - ładunek c jest teraz na lotnisku a (At_{c} = a)
-    #
-    #   Podobnie jak wyżej – generujemy akcje dla wszystkich możliwych kombinacji.
+    
     for c in cargos:
         for p in planes:
             for a in airports:
@@ -87,13 +51,6 @@ def create_air_cargo_domain(cargos, planes, airports):
                 }
                 actions.add(Strips(name, preconds, effects))
 
-    # 2C) FLY:
-    #   Parametry: plane p, from, to
-    #   Prekondycje:
-    #     - samolot p znajduje się na lotnisku "from" (At_{p} = from)
-    #   Efekty:
-    #     - samolot p znajduje się teraz na lotnisku "to" (At_{p} = to)
-    #   Oczywiście "from" != "to", więc nie chcemy generować akcji FLY p z lotniska do tego samego lotniska.
     
     
     for p in planes:
@@ -109,7 +66,6 @@ def create_air_cargo_domain(cargos, planes, airports):
                     }
                     actions.add(Strips(name, preconds, effects))
 
-    # 3) Tworzymy i zwracamy obiekt STRIPS_domain z zdefiniowanym słownikiem cech i zbiorem akcji
     return STRIPS_domain(feature_domain_dict, actions)
 
 
@@ -135,24 +91,12 @@ def do_heuristics(state, action):
     We also use the global CURRENT_GOAL dictionary to see where
     each cargo/plane ultimately needs to end up.
     """
-    # 1) If the action is loading or unloading a cargo that is *already* at its goal,
-    #    prune the action.
-    #
-    #    Example: if the action is "LOAD_C1_onto_P2_at_SFO", but the goal says
-    #    `At_C1: "SFO"` (meaning cargo C1's goal is SFO, and it's already there),
-    #    then we skip loading it.
-
-    # Parse the action name to see if it starts with LOAD, UNLOAD, or FLY.
-    # Typically the name is like "LOAD_C1_onto_P2_at_SFO" or "FLY_P1_from_JFK_to_ORD" etc.
     name_parts = action.name.split("_")
-    action_type = name_parts[0]  # e.g., LOAD / UNLOAD / FLY
+    action_type = name_parts[0] 
 
     if action_type in ("LOAD", "UNLOAD"):
-        # The second part should be the cargo name (e.g. "C1")
-        # For LOAD, action.name might be: LOAD_C1_onto_P2_at_SFO
-        # For UNLOAD, action.name might be: UNLOAD_C1_from_P2_at_SFO
-
-        cargo_str = name_parts[1]  # e.g. "C1"
+        
+        cargo_str = name_parts[1]  
         cargo_goal = CURRENT_GOAL.get(f"At_{cargo_str}")
 
         if cargo_goal is not None:
@@ -169,11 +113,10 @@ def do_heuristics(state, action):
     if action_type == "FLY":
         # Example action name: FLY_P2_from_JFK_to_ORD
         # name_parts = ["FLY", "P2", "from", "JFK", "to", "ORD"]
-        plane_str = name_parts[1]   # e.g. "P2"
+        plane_str = name_parts[1]   
         plane_goal = CURRENT_GOAL.get(f"At_{plane_str}")
 
         if plane_goal is not None:
-            # Check the current location of that plane in 'state'
             plane_loc = state.get(f"At_{plane_str}")
             if plane_loc == plane_goal:
                 # The plane is already at its goal. Only allow flying away if
@@ -189,7 +132,6 @@ def do_heuristics(state, action):
                 # We'll do the simpler approach for clarity:
                 return False
 
-    # If none of the quick checks said "prune," then keep the action.
     return True
 
 def apply_action(state, action, use_heuristics):
@@ -411,7 +353,7 @@ def generate_all_problems():
     # PROBLEM #7: Using 2 planes, 7 cargos, 4 airports
     # Domain size = 2*(7*2*4) + (2*4*(4-1)) = 112 + 24 = 136 actions
     ############################################################
-    planes_7 = ["P1", "P2"]
+    planes_7 = ["P1", "P2", "P3"]
     cargos_7 = [f"C{i}" for i in range(1, 8)]   # C1...C7
     airports_7 = ["SFO", "JFK", "ORD", "ATL"]
 
@@ -424,12 +366,15 @@ def generate_all_problems():
         "At_P3": "ORD",
 
         "At_C1": "SFO",
-        "At_C2": "SFO",
-        "At_C3": "JFK",
+        "At_C2": "JFK",
+        "At_C3": "ORD",
+
         "At_C4": "JFK",
         "At_C5": "ORD",
-        "At_C6": "ORD",
-        "At_C7": "ATL",
+        "At_C6": "ATL",
+
+        "At_C7": "SFO",
+        
 
         "Empty_P1": True,
         "Empty_P2": True,
@@ -438,16 +383,16 @@ def generate_all_problems():
 
     # Goal: move cargos to new airports and reposition planes.
     goal_7 = {
-        "At_C1": "ATL",
+        "At_C1": "JFK",
         "At_C2": "ORD",
-        "At_C3": "SFO",
-        "At_C4": "ATL",
+        "At_C3": "ATL",
+        "At_C4": "SFO",
         "At_C5": "JFK",
-        "At_C6": "ORD",
-        "At_C7": "SFO",
-
-        "At_P1": "ORD",
-        "At_P2": "ATL",
+        "At_C6": "ATL",
+        "At_C7": "ATL",
+        
+        "At_P1": "ATL",
+        "At_P2": "ORD",
         "At_P3": "JFK",
     }
 
@@ -485,7 +430,7 @@ def generate_all_problems():
         "At_C3": "LAX",
         "At_C4": "SFO",
         "At_C5": "ORD",
-        "At_C6": "ATL",
+        "At_C6": "LAX",
 
         "At_P1": "ATL",
         "At_P2": "JFK",
